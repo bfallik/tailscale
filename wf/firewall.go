@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+//go:build windows
 // +build windows
 
 package wf
@@ -243,7 +244,7 @@ func (f *Firewall) newRule(name string, w weight, layer wf.LayerID, conditions [
 		Provider:   f.providerID,
 		Sublayer:   f.sublayerID,
 		Layer:      layer,
-		Weight:     uint64(w),
+		Weight:     uint32(w),
 		Conditions: conditions,
 		Action:     action,
 	}, nil
