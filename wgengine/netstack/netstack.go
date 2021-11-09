@@ -241,13 +241,21 @@ func (ns *Impl) addSubnetAddress(ip netaddr.IP) {
 	ns.mu.Unlock()
 	// Only register address into netstack for first concurrent connection.
 	if needAdd {
-		var pn tcpip.NetworkProtocolNumber
-		if ip.Is4() {
-			pn = ipv4.ProtocolNumber
-		} else if ip.Is6() {
-			pn = ipv6.ProtocolNumber
+		pa := tcpip.ProtocolAddress{
+			AddressWithPrefix: tcpip.AddressWithPrefix{
+				Address:   tcpip.Address(ip.IPAddr().IP),
+				PrefixLen: int(ip.BitLen()),
+			},
 		}
-		ns.ipstack.AddAddress(nicID, pn, tcpip.Address(ip.IPAddr().IP))
+		if ip.Is4() {
+			pa.Protocol = ipv4.ProtocolNumber
+		} else if ip.Is6() {
+			pa.Protocol = ipv6.ProtocolNumber
+		}
+		ns.ipstack.AddProtocolAddress(nicID, pa, stack.AddressProperties{
+			PEB:        stack.CanBePrimaryEndpoint,
+			ConfigType: stack.AddressConfigStatic,
+		})
 	}
 }
 
@@ -318,12 +326,15 @@ func (ns *Impl) updateIPs(nm *netmap.NetworkMap) {
 		}
 	}
 	for ipp := range ipsToBeAdded {
-		var err tcpip.Error
-		if ipp.Address.To4() == "" {
-			err = ns.ipstack.AddAddressWithPrefix(nicID, ipv6.ProtocolNumber, ipp)
-		} else {
-			err = ns.ipstack.AddAddressWithPrefix(nicID, ipv4.ProtocolNumber, ipp)
+		pa := tcpip.ProtocolAddress{
+			AddressWithPrefix: ipp,
 		}
+		if ipp.Address.To4() == "" {
+			pa.Protocol = ipv6.ProtocolNumber
+		} else {
+			pa.Protocol = ipv4.ProtocolNumber
+		}
+		var err tcpip.Error
 		if err != nil {
 			ns.logf("netstack: could not register IP %s: %v", ipp, err)
 		} else {

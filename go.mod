@@ -48,15 +48,15 @@ require (
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519
 	golang.org/x/net v0.0.0-20211020060615-d418f374d309
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
-	golang.org/x/sys v0.0.0-20211020174200-9d6173849985
+	golang.org/x/sys v0.0.0-20211108224332-cbcd623f202e
 	golang.org/x/term v0.0.0-20210503060354-a79de5458b56
-	golang.org/x/time v0.0.0-20210611083556-38a9dc6acbc6
+	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac
 	golang.org/x/tools v0.1.7
 	golang.zx2c4.com/wireguard v0.0.0-20211020205005-82e0b734e5d2
 	golang.zx2c4.com/wireguard/windows v0.4.10
 	honnef.co/go/tools v0.2.1
 	inet.af/netaddr v0.0.0-20211027220019-c74959edd3b6
-	inet.af/netstack v0.0.0-20211101182044-1c1bcf452982
+	inet.af/netstack v0.0.0-20211108232802-53fb0ba0fff2
 	inet.af/peercred v0.0.0-20210318190834-4259e17bb763
 	inet.af/wf v0.0.0-20210516214145-a5343001b756
 	nhooyr.io/websocket v1.8.7
