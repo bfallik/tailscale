@@ -47,14 +47,14 @@ func (cfg *Config) ToUAPI(w io.Writer, prev *Config) error {
 
 	// Add/configure all new peers.
 	for _, p := range cfg.Peers {
-		oldPeer, wasPresent := old[p.PublicKey]
+		oldPeer := old[p.PublicKey]
 		setPeer(p)
 		set("protocol_version", "1")
 
 		// Avoid setting endpoints if the correct one is already known
 		// to WireGuard, because doing so generates a bit more work in
 		// calling magicsock's ParseEndpoint for effectively a no-op.
-		if !wasPresent {
+		if oldPeer.WGEndpoint != p.PublicKey {
 			set("endpoint", p.PublicKey.UntypedHexString())
 		}
 
